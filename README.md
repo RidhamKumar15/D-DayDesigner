@@ -35,7 +35,7 @@ A versatile tool to craft gradient-based countdown visuals, showcasing the remai
    ```
 2. Download or clone the repository:  
    ```bash
-   git clone https://github.com/RidhamKumar15/D-DayDesigner.git
+   https://github.com/RidhamKumar15/D-DayDesigner.git
    ```
 3. Open the project directory in your IDE.  
 4. Compile and execute the `D-DayDesigner` main file.  
