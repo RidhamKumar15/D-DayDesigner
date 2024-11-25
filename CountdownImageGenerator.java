@@ -6,9 +6,9 @@ import javax.imageio.ImageIO;
 public class CountdownImageGenerator {
 
     public static void main(String[] args) {
-        int daysLeft = 50; // Example days left
-        int totalDays = 100; // Example total days
-        String gradientType = "soft_sunrise"; // Example gradient type
+        int daysLeft = 50; // Days remaining
+        int totalDays = 100; // Total days
+        String gradientType = "soft_sunrise"; // Gradient style
 
         createCountdownImage(daysLeft, totalDays, gradientType);
     }
@@ -17,11 +17,9 @@ public class CountdownImageGenerator {
         int width = 1920;
         int height = 1080;
 
-        // Create the BufferedImage
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         Graphics2D g2d = image.createGraphics();
 
-        // Define gradients
         Color[] gradient = getGradientColors(gradientType);
         if (gradient == null) {
             System.err.println("Invalid gradient type.");
@@ -38,55 +36,48 @@ public class CountdownImageGenerator {
             g2d.drawLine(0, y, width, y);
         }
 
-        // Set fonts
+        // Fonts
         Font mainFont = new Font("Arial", Font.BOLD, 100);
         Font secondaryFont = new Font("Arial", Font.BOLD, 80);
 
-        // Draw secondary text
+        // Secondary text
         String secondaryText = "Discipline today, Dominance tomorrow";
         FontMetrics metrics = g2d.getFontMetrics(secondaryFont);
         int textWidth = metrics.stringWidth(secondaryText);
-        int textHeight = metrics.getHeight();
         int xSecondary = (width - textWidth) / 2;
         int ySecondary = height / 3;
         g2d.setColor(Color.GRAY);
         g2d.setFont(secondaryFont);
-        g2d.drawString(secondaryText, xSecondary + 3, ySecondary + 3); // Shadow
+        g2d.drawString(secondaryText, xSecondary + 3, ySecondary + 3);
         g2d.setColor(Color.BLACK);
         g2d.drawString(secondaryText, xSecondary, ySecondary);
 
-        // Draw main text
+        // Main text
         String mainText = "D-Day ~ " + daysLeft + " Days left";
         metrics = g2d.getFontMetrics(mainFont);
         textWidth = metrics.stringWidth(mainText);
-        textHeight = metrics.getHeight();
         int xMain = (width - textWidth) / 2;
-        int yMain = ySecondary + textHeight + 50;
+        int yMain = ySecondary + metrics.getHeight() + 50;
         g2d.setColor(Color.BLACK);
         g2d.setFont(mainFont);
         g2d.drawString(mainText, xMain, yMain);
 
-        // Draw progress bar
+        // Progress bar
         int barWidth = (int) (width * 0.5);
         int barHeight = 30;
         int barX = (width - barWidth) / 2;
         int barY = yMain + 100;
         int filledWidth = (int) (barWidth * ((double) (totalDays - daysLeft) / totalDays));
 
-        // Draw progress bar background
-        g2d.setColor(new Color(200, 200, 200)); // Light gray
+        g2d.setColor(new Color(200, 200, 200));
         g2d.fillRoundRect(barX, barY, barWidth, barHeight, 15, 15);
-
-        // Draw progress fill
         g2d.setColor(new Color(gradient[0].getRed(), gradient[0].getGreen(), gradient[0].getBlue()));
         g2d.fillRoundRect(barX, barY, filledWidth, barHeight, 15, 15);
-
-        // Draw progress bar border
         g2d.setColor(Color.BLACK);
         g2d.drawRoundRect(barX, barY, barWidth, barHeight, 15, 15);
 
-        // Dispose Graphics2D and save the image
         g2d.dispose();
+
         try {
             ImageIO.write(image, "png", new File("countdown_image.png"));
             System.out.println("Image saved as countdown_image.png");
@@ -95,7 +86,6 @@ public class CountdownImageGenerator {
         }
     }
 
-    // Helper method to define gradient colors
     private static Color[] getGradientColors(String gradientType) {
         switch (gradientType) {
             case "soft_sunrise":
@@ -106,12 +96,10 @@ public class CountdownImageGenerator {
                 return new Color[]{new Color(255, 255, 255), new Color(255, 204, 204)};
             case "minty_fresh":
                 return new Color[]{new Color(173, 255, 247), new Color(144, 238, 144)};
-            // Add more gradient cases here as needed
             default:
                 return null;
         }
     }
 }
 
-
-// Made With Love ❤️  ~ Ridham Kumar
+// Crafted with ❤️ by Ridham Kumar
