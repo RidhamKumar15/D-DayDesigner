@@ -1,0 +1,199 @@
+import os
+import datetime
+import ctypes
+import random
+from PIL import Image, ImageDraw, ImageFont
+
+
+print("Current working directory:", os.getcwd())
+
+# Function to create a countdown image with a stylish progress bar
+def create_countdown_image(days_left, total_days, gradient_type):
+    # Set image size
+    width, height = 1920, 1080  # Adjust as needed
+    image = Image.new("RGB", (width, height))
+
+
+    gradients = {
+    "soft_sunrise": [(255, 255, 204), (255, 204, 178)],  # Pale yellow to soft peach
+    "morning_mist": [(255, 230, 230), (230, 204, 255)],  # Soft pink to light lavender
+    "blushing_clouds": [(255, 255, 255), (255, 204, 204)],  # White to light pink
+    "minty_fresh": [(173, 255, 247), (144, 238, 144)],  # Pale aqua to light mint
+    "peachy_breeze": [(255, 229, 204), (255, 204, 153)],  # Soft orange to peach
+    "sunlit_meadow": [(255, 255, 204), (204, 255, 204)],  # Pale yellow to soft green
+    "lilac_dreams": [(255, 253, 208), (230, 204, 255)],  # Cream to light lilac
+    "serene_ocean": [(204, 255, 255), (173, 216, 230)],  # Pale turquoise to light blue
+    "soft_spring": [(204, 255, 204), (255, 255, 204)],  # Soft green to light yellow
+    "candy_floss": [(173, 216, 230), (255, 182, 193)],  # Cotton candy blue to light pink
+    "sunset_blush": [(255, 204, 178), (255, 153, 153)],  # Light peach to coral pink
+    "ocean_wave": [(176, 224, 230), (173, 216, 230)],  # Soft blue to light cyan
+    "frosted_night": [(230, 230, 250), (176, 224, 230)],  # Pale lavender to light blue
+    "whispering_breeze": [(204, 255, 204), (173, 255, 255)],  # Pale green to soft aqua
+    "lavender_field": [(255, 255, 240), (230, 230, 250)],  # Soft white to lavender
+    "creamy_latte": [(210, 180, 140), (255, 239, 204)],  # Soft brown to light beige
+    "vanilla_sky": [(173, 216, 230), (255, 250, 205)],  # Light blue to cream
+    "mellow_mango": [(255, 255, 204), (255, 204, 153)],  # Pale yellow to light orange
+    "silky_sand": [(255, 229, 204), (210, 180, 140)],  # Pale peach to light tan
+    "dreamy_pear": [(255, 255, 204), (144, 238, 144)],  # Pale yellow-green to soft green
+    "light_moss": [(224, 255, 255), (144, 238, 144)],  # Pale aqua to light green
+    "lavender_haze": [(255, 240, 255), (230, 230, 250)],  # Soft purple to lavender
+    "sunset_orange": [(255, 204, 204), (255, 204, 153)],  # Soft pink to light orange
+    "tangerine_dream": [(255, 229, 186), (255, 204, 153)],  # Soft peach to light tangerine
+    "pastel_emerald": [(152, 251, 152), (80, 200, 120)],  # Pale green to light emerald
+    "lilac_breeze": [(255, 230, 255), (200, 162, 200)],  # Soft lavender to light lilac
+    "apricot_delight": [(255, 178, 102), (255, 229, 204)],  # Pale orange to light apricot
+}
+
+
+
+
+    # Create a gradient background
+    if gradient_type in gradients:
+        start_color, end_color = gradients[gradient_type]
+        for y in range(height):
+            r = int(start_color[0] + (end_color[0] - start_color[0]) * (y / height))
+            g = int(start_color[1] + (end_color[1] - start_color[1]) * (y / height))
+            b = int(start_color[2] + (end_color[2] - start_color[2]) * (y / height))
+            image.paste((r, g, b), [0, y, width, y + 1])
+    else:
+        raise ValueError("Invalid gradient type")
+
+   
+    draw = ImageDraw.Draw(image)
+
+    font_size_main = 90  # Adjust size as necessary for the main text
+    font_main = ImageFont.truetype("arial.ttf", font_size_main)
+
+    font_size_secondary = 150  # Increased size for the secondary text
+    font_secondary = ImageFont.truetype("arial.ttf", font_size_secondary)
+
+    font_secondary = ImageFont.truetype("Nirmala.ttf", font_size_secondary)
+    font_secondary = ImageFont.truetype(r"C:\Users\ridha\OneDrive\Pictures\wall\lock screan\YatraOne-Regular.ttf", font_size_secondary)
+
+    main_text = f"D-Day ~ {days_left} Days left"
+    #secondary_text = "Discipline today, Dominance tomorrow"
+    secondary_text = "वीर भोग्य वसुन्धरा"
+
+    text_bbox_sec = draw.textbbox((0, 0), secondary_text, font=font_secondary)
+    text_width_sec = text_bbox_sec[2] - text_bbox_sec[0]
+    text_height_sec = text_bbox_sec[3] - text_bbox_sec[1]
+    text_x_sec = (width - text_width_sec) / 2
+    text_y_sec = height * 0.35  # Position it slightly above the main text
+
+    shadow_offset = 3  # Offset for the shadow
+    draw.text((text_x_sec + shadow_offset, text_y_sec + shadow_offset), secondary_text, font=font_secondary, fill="gray")
+
+
+    draw.text((text_x_sec, text_y_sec), secondary_text, font=font_secondary, fill="black")
+
+    
+    text_bbox_main = draw.textbbox((0, 0), main_text, font=font_main)
+    text_width_main = text_bbox_main[2] - text_bbox_main[0]
+    text_height_main = text_bbox_main[3] - text_bbox_main[1]
+    text_x_main = (width - text_width_main) / 2
+    text_y_main = text_y_sec + text_height_sec + 50  # Position below the secondary text
+
+
+    draw.text((text_x_main + shadow_offset, text_y_main + shadow_offset), main_text, font=font_main, fill="black")
+
+
+    draw.text((text_x_main, text_y_main), main_text, font=font_main, fill="black")
+
+
+    bar_width = width * 0.5  # Shorter bar width
+    bar_height = 30  # Slightly taller bar for emphasis
+    bar_x = (width - bar_width) / 2
+    bar_y = text_y_main + text_height_main + 60  # Position below the main text
+    bar_radius = 15  # Rounded corners
+
+  
+    mask = Image.new("L", (int(bar_width), int(bar_height)), 0)
+    mask_draw = ImageDraw.Draw(mask)
+    mask_draw.rounded_rectangle([(0, 0), (bar_width, bar_height)], radius=bar_radius, fill=255)
+
+ 
+    base_days = 100
+   
+    filled_days = base_days - days_left  # Calculate how many days are filled
+    progress = max(0, min(1, filled_days / base_days))  # Ensure value is between 0 and 1
+    fill_width = int(bar_width * progress)
+
+
+    fill_color = (int(start_color[0] * 0.8), int(start_color[1] * 0.8), int(start_color[2] * 0.8))  # Darkened version of the start color
+
+    # Create a striped pattern for the progress fill with diagonal lines
+    stripe_pattern = Image.new("RGB", (int(bar_width), int(bar_height)), image.getpixel((0, 0)))  # Use background color for base
+    stripe_draw = ImageDraw.Draw(stripe_pattern)
+
+ 
+    stripe_width = 10  # Width of each stripe
+    for x in range(-int(bar_height), int(bar_width), stripe_width * 2):
+        stripe_draw.line([(x, 0), (x + bar_height, bar_height)], fill=fill_color, width=stripe_width)  # Darker color for stripes
+        stripe_draw.line([(x + stripe_width, 0), (x + stripe_width + bar_height, bar_height)], fill=(255, 255, 255), width=stripe_width)  # White stripes for contrast
+
+    progress_fill = stripe_pattern.crop((0, 0, fill_width, bar_height))
+
+
+    fill_mask = mask.crop((0, 0, fill_width, bar_height))
+
+    image.paste(progress_fill, (int(bar_x), int(bar_y)), fill_mask)
+
+
+    draw.rounded_rectangle([bar_x, bar_y, bar_x + bar_width, bar_y + bar_height], radius=bar_radius, outline="black", width=3)
+
+    # Save the image with a full path
+    image_path = r"path where you want to save the picture"
+    image.save(image_path)
+    print(f"Image saved successfully at {image_path}.")
+
+
+exam_date = datetime.datetime(2025, 3, 30)  # Update to your exam date
+
+# Calculate days left for the progress bar
+today = datetime.datetime.now()
+days_left = (exam_date - today).days
+
+
+gradient_types = [
+    "soft_sunrise",
+    "morning_mist",
+    "blushing_clouds",
+    "minty_fresh",
+    "peachy_breeze",
+    "sunlit_meadow",
+    "lilac_dreams",
+    "serene_ocean",
+    "soft_spring",
+    "candy_floss",
+    "sunset_blush",
+    "ocean_wave",
+    "frosted_night",
+    "whispering_breeze",
+    "lavender_field",
+    "creamy_latte",
+    "vanilla_sky",
+    "vanilla_sky",
+    "mellow_mango",
+    "silky_sand",
+    "dreamy_pear",
+    "light_moss",
+    "lavender_haze",
+    "sunset_orange",
+    "tangerine_dream",
+    "pastel_emerald",
+    "lilac_breeze",
+    "apricot_delight",
+]
+
+
+
+
+elected_gradient = random.choice(gradient_types)
+
+create_countdown_image(days_left, 100, selected_gradient)  # Randomly selected gradient type
+
+def set_wallpaper(image_path):
+    ctypes.windll.user32.SystemParametersInfoW(20, 0, image_path, 3)
+
+set_wallpaper(r"C:\Users\ridha\OneDrive\Pictures\wall\lock screan\daily_countdown_wallpaper.png")
+
